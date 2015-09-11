@@ -1,0 +1,21 @@
+{
+  "name": "dead-moon",
+  "version": "0.1.0",
+  "homepage": "https://github.com/Ingener74/Dead-Moon",
+  "authors": [
+    "ShnaiderPavel <shnaiderpasha@gmail.com>"
+  ],
+  "main": "app/template/index.html",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.5",
+    "react": "~0.13.3"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "dead-moon",
+  "version": "0.1.0",
+  "description": "Dead Moon is test Flask-React.js web application",
+  "main": "gulpfile.coffee",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ingener74/Dead-Moon.git"
+  },
+  "author": "Shnaider Pavel <shnaiderpasha@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Ingener74/Dead-Moon/issues"
+  },
+  "homepage": "https://github.com/Ingener74/Dead-Moon#readme",
+  "devDependencies": {
+    "coffee-script": "^1.10.0",
+    "gulp": "^3.9.0",
+    "gulp-shell": "^0.4.3",
+    "run-sequence": "^1.1.2"
+  },
+  "dependencies": {
+    "gulp-clean": "^0.3.1"
+  }
+}
