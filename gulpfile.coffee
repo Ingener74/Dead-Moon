@@ -2,6 +2,8 @@ gulp = require 'gulp'
 clean = require 'gulp-clean'
 run_sequence = require 'run-sequence'
 shell = require 'gulp-shell'
+cjsx = require 'gulp-cjsx'
+gutil = require 'gulp-util'
 
 gulp.task 'clean', ->
   gulp.src './build/'
@@ -29,11 +31,16 @@ gulp.task 'py', ->
   gulp.src './app/*.py'
   .pipe gulp.dest './build/'
 
+gulp.task 'cjsx', ->
+  gulp.src('./app/static/cjsx/*.cjsx')
+  .pipe cjsx({bare: true}).on('error', gutil.log)
+  .pipe gulp.dest './build/static/js/'
+
 gulp.task 'build', (callback)->
-  run_sequence 'clean', ['html', 'css', 'js', 'py'], callback
+  run_sequence 'clean', ['html', 'css', 'js', 'py', 'cjsx'], callback
 
 gulp.task 'start_flask', shell.task [
-  '. venv/bin/activate && cd build && python main.py'
+  'cd build && python main.py'
 ]
 
 gulp.task 'default', (callback) ->
