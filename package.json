@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Ingener74/Dead-Moon#readme",
   "devDependencies": {
+    "browser-sync": "^2.9.3",
     "coffee-script": "^1.10.0",
     "gulp": "^3.9.0",
     "gulp-cjsx": "^3.0.0",
