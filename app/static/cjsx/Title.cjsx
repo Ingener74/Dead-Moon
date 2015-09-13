@@ -3,7 +3,7 @@ Title = React.createClass
         title: "My Title"
     render: ->
         <div>
-            <h2>Title: {this.state.title}</h2>
+            <h2>Title : {this.state.title}, title from props: {this.props.title2}</h2>
         </div>
 
 Submitter = React.createClass
@@ -13,8 +13,8 @@ Submitter = React.createClass
 SubmittedTitle = React.createClass
     render: ->
         <div>
-            <Title />
+            <Title title2="prop title 2"/>
             <Submitter />
         </div>
 
-React.render React.createElement(SubmittedTitle, null), document.getElementById('content')
+React.render <SubmittedTitle />, document.getElementById('content')

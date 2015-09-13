@@ -4,9 +4,18 @@ run_sequence = require 'run-sequence'
 shell = require 'gulp-shell'
 cjsx = require 'gulp-cjsx'
 gutil = require 'gulp-util'
+browsersync = require 'browser-sync'
+
+###
+  Очистка и сборка
+###
+
+gulp.task 'full_clean', ->
+  gulp.src ['./build/']
+  .pipe clean()
 
 gulp.task 'clean', ->
-  gulp.src './build/'
+  gulp.src ['./build/templates/', './build/static/']
   .pipe clean()
 
 gulp.task 'css', ->
@@ -39,10 +48,22 @@ gulp.task 'cjsx', ->
 gulp.task 'build', (callback)->
   run_sequence 'clean', ['html', 'css', 'js', 'py', 'cjsx'], callback
 
-gulp.task 'start_flask', shell.task [
-  'cd build && python main.py'
-]
+gulp.task 'watch', ->
+  gulp.watch './app/**/*', ['default']
 
 gulp.task 'default', (callback) ->
-  run_sequence 'build', 'start_flask', callback
+  run_sequence 'build', ['watch'], callback
+
+###
+  Полная пересборка
+###
+gulp.task 'full_build', (callback)->
+  run_sequence 'full_clean', ['html', 'css', 'js', 'py', 'cjsx'], callback
+
+###
+  Запуск Flask App
+###
+gulp.task 'start_flask', shell.task [
+  'cd build && python main.py &'
+]
 
