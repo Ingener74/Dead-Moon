@@ -1,4 +1,15 @@
 Title = React.createClass
+    componentDidMount: ->
+        $.ajax
+            url: '/test'
+            type: 'POST'
+            dataType: 'json'
+            success: ((data)->
+                @setState title: data.title)
+                .bind this
+            error: ((xhr, status, err)->
+                console.log status, err
+                .bind this)
     getInitialState: ->
         title: "My Title"
     render: ->
@@ -7,13 +18,29 @@ Title = React.createClass
         </div>
 
 Submitter = React.createClass
+    getInitialState: ->
+        return title: "my initial title"
+    handleClick: (event)->
+        $.ajax
+            url: '/test'
+            type: 'POST'
+            dataType: 'json'
+            success: ((data)->
+                @setState title: data.title)
+                .bind this
+            error: ((xhr, status, err)->
+                alert status, err)
+                .bind this
+
     render: ->
-        <button type="button" class="btn btn-default">Submit</button>
+        <div>
+            <Title title2={this.state.title}/>
+            <button onClick=@handleClick type="button" class="btn btn-default">Submit</button>
+        </div>
 
 SubmittedTitle = React.createClass
     render: ->
         <div>
-            <Title title2="prop title 2"/>
             <Submitter />
         </div>
 
