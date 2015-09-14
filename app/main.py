@@ -1,6 +1,5 @@
 # encoding: utf8
-
-
+import os
 from flask import Flask, render_template, jsonify, request
 
 app = Flask(__name__)
@@ -30,8 +29,12 @@ def test(place):
     return jsonify({"title": "test ajax title {ind}".format(ind=t.get_index())})
 
 
+@app.route('/explore/<go_to>', methods=['POST'])
+def explore(go_to):
+    return jsonify(os.listdir(go_to))
+
+
 @app.route('/')
-@app.route('/index')
 def index():
     return render_template('index.html')
 
