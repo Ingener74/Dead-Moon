@@ -7,10 +7,6 @@ browsersync = require 'browser-sync'
 
 exec = require('child_process').exec;
 
-###
-  ������� � ������
-###
-
 gulp.task 'full_clean', ->
   gulp.src ['./build/']
   .pipe clean()
@@ -66,8 +62,5 @@ gulp.task 'start_browser', ['runserver'], ->
 gulp.task 'default', (callback) ->
   run_sequence 'build', ['start_browser'], callback
 
-###
-  ������ ����������
-###
 gulp.task 'full_build', (callback)->
   run_sequence 'full_clean', ['html', 'css', 'js', 'py', 'cjsx'], callback

@@ -24,10 +24,8 @@ t = Test()
 
 @app.route('/test/<place>', methods=['POST'])
 def test(place):
-    print 'place ', place
     t.inc()
     if place == 'button':
-        print 'button'
         return jsonify({'title': 'button {}'.format(t.get_index())})
     return jsonify({"title": "test ajax title {ind}".format(ind=t.get_index())})
 
