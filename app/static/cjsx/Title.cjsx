@@ -1,7 +1,7 @@
 Title = React.createClass
     componentDidMount: ->
         $.ajax
-            url: '/test'
+            url: '/test/title'
             type: 'POST'
             dataType: 'json'
             success: ((data)->
@@ -19,10 +19,10 @@ Title = React.createClass
 
 Submitter = React.createClass
     getInitialState: ->
-        return title: "my initial title"
+        return title: "initial"
     handleClick: (event)->
         $.ajax
-            url: '/test'
+            url: '/test/button'
             type: 'POST'
             dataType: 'json'
             success: ((data)->
