@@ -1,6 +1,7 @@
 # encoding: utf8
 import os
-from flask import Flask, render_template, jsonify, request
+
+from flask import Flask, render_template, jsonify
 
 app = Flask(__name__)
 
@@ -30,27 +31,38 @@ def test(place):
 
 
 class ExplorePath:
-    def __init__(self):
-        self.path = ['.']
+    def __init__(self, windows=False):
+        self.windows = windows
+        self.path = [''] if self.windows else ['.']
 
     def go(self, directory):
         self.path += [directory]
 
     def up(self):
+        if len(self.path) == 1:
+            raise TypeError('can not go up')
         del self.path[-1]
 
     def getPath(self):
-        return '*{}'.format(self.path)
+        if self.windows:
+            return ('{}/' * (len(self.path) - 1)).format(*self.path[1:])
+        else:
+            return ('{}/' * len(self.path)).format(*self.path)
+
+
+explorer = ExplorePath(windows=True)
 
 
 @app.route('/explore/<go_to>', methods=['POST'])
 def explore(go_to):
     if go_to == 'current':
-        current_dir = ['up'] + os.listdir('.')
-        return jsonify({'content': current_dir})
-    if go_to == 'up':
-        return jsonify({'content': []})
-    return jsonify({'content': ['foo', 'bar']})
+        return jsonify({'content': ['up'] + os.listdir('.')})
+    elif go_to == 'up':
+        explorer.up()
+        return jsonify({'content': ['up'] + os.listdir(explorer.getPath())})
+    else:
+        explorer.go(go_to)
+        return jsonify({'content': ['up'] + os.listdir(explorer.getPath())})
 
 
 @app.route('/')

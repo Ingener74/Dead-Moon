@@ -18,7 +18,8 @@ List = React.createClass
             }
         </div>
     handleClick: (index)->
-        $.post '/explore/' + @state.items.title, ((data)->
+        console.log @state.items[index].title
+        $.post '/explore/' + @state.items[index].title, ((data)->
             @setState items: data.content.map (item)->
                 title: item
             ).bind this

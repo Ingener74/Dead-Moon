@@ -9,14 +9,20 @@ class TestExplorePath(TestCase):
         self.exp = ExplorePath()
 
     def test_go(self):
-        self.assertEqual(self.exp.go('path1'), ['.', 'path1'])
-        self.assertEqual(self.exp.go('path2'), ['.', 'path1', 'path2'])
+        self.exp.go('path1')
+        self.assertEqual(self.exp.path, ['.', 'path1'])
+        self.exp.go('path2')
+        self.assertEqual(self.exp.path, ['.', 'path1', 'path2'])
 
     def test_up(self):
         self.assertEqual(len(self.exp.path), 1)
-        self.assertEqual(self.exp.go('path1'), ['.', 'path1'])
+
+        self.exp.go('path1')
+        self.assertEqual(self.exp.path, ['.', 'path1'])
         self.assertEqual(len(self.exp.path), 2)
-        self.assertEqual(self.exp.go('path2'), ['.', 'path1', 'path2'])
+
+        self.exp.go('path2')
+        self.assertEqual(self.exp.path, ['.', 'path1', 'path2'])
         self.assertEqual(len(self.exp.path), 3)
 
         self.exp.up()
@@ -25,15 +31,19 @@ class TestExplorePath(TestCase):
         self.exp.up()
         self.assertEqual(len(self.exp.path), 1)
 
-        self.assertRaises(self.exp.up(), TypeError)
+        with self.assertRaises(TypeError):
+            self.exp.up()
+
         self.assertEqual(len(self.exp.path), 1)
 
     def test_getPath(self):
         self.assertEqual(self.exp.getPath(), './')
 
-        self.assertEqual(self.exp.go('path1'), ['.', 'path1'])
+        self.exp.go('path1')
+        self.assertEqual(self.exp.path, ['.', 'path1'])
         self.assertEqual(self.exp.getPath(), './path1/')
 
-        self.assertEqual(self.exp.go('path2'), ['.', 'path1', 'path2'])
+        self.exp.go('path2')
+        self.assertEqual(self.exp.path, ['.', 'path1', 'path2'])
         self.assertEqual(self.exp.getPath(), './path1/path2/')
 
