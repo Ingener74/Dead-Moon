@@ -31,6 +31,9 @@ def test(place):
 
 @app.route('/explore/<go_to>', methods=['POST'])
 def explore(go_to):
+    if go_to == 'current':
+        current_dir = ['up'] + os.listdir('.')
+        return jsonify({'content': current_dir})
     return jsonify(os.listdir(go_to))
 
 
