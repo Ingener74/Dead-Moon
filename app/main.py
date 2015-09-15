@@ -29,12 +29,28 @@ def test(place):
     return jsonify({"title": "test ajax title {ind}".format(ind=t.get_index())})
 
 
+class ExplorePath:
+    def __init__(self):
+        self.path = ['.']
+
+    def go(self, directory):
+        self.path += [directory]
+
+    def up(self):
+        del self.path[-1]
+
+    def getPath(self):
+        return '*{}'.format(self.path)
+
+
 @app.route('/explore/<go_to>', methods=['POST'])
 def explore(go_to):
     if go_to == 'current':
         current_dir = ['up'] + os.listdir('.')
         return jsonify({'content': current_dir})
-    return jsonify(os.listdir(go_to))
+    if go_to == 'up':
+        return jsonify({'content': []})
+    return jsonify({'content': ['foo', 'bar']})
 
 
 @app.route('/')
