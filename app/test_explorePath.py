@@ -1,12 +1,12 @@
 # encoding: utf8
 from unittest import TestCase
 
-from app.main import ExplorePath
+from app.main import ExplorerLinux
 
 
 class TestExplorePath(TestCase):
     def setUp(self):
-        self.exp = ExplorePath()
+        self.exp = ExplorerLinux()
 
     def test_go(self):
         self.exp.go('path1')
