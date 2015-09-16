@@ -1,5 +1,6 @@
 # encoding: utf8
 import os
+import platform
 
 from flask import Flask, render_template, jsonify
 
@@ -32,8 +33,10 @@ def test(place):
 
 class ExplorePath:
     def __init__(self, windows=False):
+        print 'Windows' if windows else 'Not Windows'
         self.windows = windows
-        self.path = [''] if self.windows else ['.']
+        self.path = filter(lambda d: len(d) > 0, os.path.dirname(os.getcwd()).split('/'))
+        print self.path
 
     def go(self, directory):
         self.path += [directory]
@@ -47,16 +50,16 @@ class ExplorePath:
         if self.windows:
             return ('{}/' * (len(self.path) - 1)).format(*self.path[1:])
         else:
-            return ('{}/' * len(self.path)).format(*self.path)
+            return ('/{}' * len(self.path)).format(*self.path)
 
 
-explorer = ExplorePath(windows=True)
+explorer = ExplorePath(windows=platform.system() == 'Windows')
 
 
 @app.route('/explore/<go_to>', methods=['POST'])
 def explore(go_to):
     if go_to == 'current':
-        return jsonify({'content': ['up'] + os.listdir('.')})
+        return jsonify({'content': ['up'] + os.listdir(explorer.getPath())})
     elif go_to == 'up':
         explorer.up()
         return jsonify({'content': ['up'] + os.listdir(explorer.getPath())})
