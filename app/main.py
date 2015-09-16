@@ -1,7 +1,7 @@
 # encoding: utf8
-import os
 import platform
 
+import os
 from flask import Flask, render_template, jsonify
 
 app = Flask(__name__)
@@ -21,17 +21,10 @@ class Test:
 t = Test()
 
 
-@app.route('/test/<place>', methods=['POST'])
-def test(place):
-    t.inc()
-    if place == 'button':
-        return jsonify({'title': 'button {}'.format(t.get_index())})
-    return jsonify({"title": "test ajax title {ind}".format(ind=t.get_index())})
-
-
 class Explorer:
-    def __init__(self, path):
-        self.path = path
+    def __init__(self, *args, **kwargs):
+        self.template = kwargs['template']
+        self.path = filter(lambda d: len(d) > 0, os.path.dirname(os.getcwd()).split(kwargs['separator']))
 
     def go(self, directory):
         self.path += [directory]
@@ -42,26 +35,28 @@ class Explorer:
         del self.path[-1]
 
     def getPath(self):
-        raise NotImplementedError
+        return (self.template * len(self.path)).format(*self.path)
 
 
 class ExplorerLinux(Explorer):
     def __init__(self):
-        Explorer.__init__(self, filter(lambda d: len(d) > 0, os.path.dirname(os.getcwd()).split('/')))
-
-    def getPath(self):
-        return ('/{}' * len(self.path)).format(*self.path)
+        Explorer.__init__(self, separator='/', template='/{}')
 
 
 class ExplorerWindows(Explorer):
     def __init__(self):
-        Explorer.__init__(self, filter(lambda d: len(d) > 0, os.path.dirname(os.getcwd()).split('\\')))
-
-    def getPath(self):
-        return ('{}\\' * (len(self.path))).format(*self.path)
+        Explorer.__init__(self, separator='\\', template='{}\\')
 
 
 explorer = ExplorerWindows() if platform.system() == 'Windows' else ExplorerLinux()
+
+
+@app.route('/test/<place>', methods=['POST'])
+def test(place):
+    t.inc()
+    if place == 'button':
+        return jsonify({'title': 'button {}'.format(t.get_index())})
+    return jsonify({"title": "test ajax title {ind}".format(ind=t.get_index())})
 
 
 @app.route('/explore/<go_to>', methods=['POST'])
@@ -73,7 +68,7 @@ def explore(go_to):
             explorer.go(go_to)
         return jsonify({'content': ['up'] + os.listdir(explorer.getPath())})
     except BaseException, e:
-        print str(e)
+        return jsonify({'error': str(e)})
 
 
 @app.route('/')
